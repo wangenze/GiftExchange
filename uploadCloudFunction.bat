@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Tencent\微信web开发者工具\cli.bat" cloud functions deploy --e cloud1-5geq45syfa072c32 --n quickstartFunctions --r --project "C:\Users\wange\WeChatProjects\GiftExchange" --report_first --report
