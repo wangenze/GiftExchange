@@ -6,6 +6,14 @@ Page({
   data: {
     showUploadTip: false,
     powerList: [{
+        title: '礼物交换',
+        tip: '一年一度？',
+        showItem: false,
+        item: [{
+          title: '抽签',
+          page: 'userHome',
+        }],
+      }, {
       title: '云函数',
       tip: '安全、免鉴权运行业务代码',
       showItem: false,
@@ -63,6 +71,7 @@ Page({
     haveCreateCollection: false
   },
 
+  
   onClickPowerInfo(e) {
     const index = e.currentTarget.dataset.index;
     const powerList = this.data.powerList;
@@ -103,10 +112,52 @@ Page({
     });
   },
 
-  jumpPage(e) {
-    wx.navigateTo({
-      url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}`,
+  async jumpPage(e) {
+    const userInfo = await this.getUserInfo();
+    if (userInfo) {
+      wx.navigateTo({
+        url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}&userInfoStr=${JSON.stringify(userInfo)}`,
+      });
+    }
+  },
+  
+  async setUserInfoToBackend(userInfo) {
+    wx.showLoading({
+      title: '',
     });
+    try {
+      let res = await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        config: {
+          env: this.data.selectedEnv.envId
+        },
+        data: {
+          type: 'updateUser',
+          data: {
+            userInfo: userInfo
+          }
+        }
+      })
+      if (!res.result.success) {
+        console.log(res.result)
+        throw new Error("Unable to update user info")
+      }
+    } finally {
+      wx.hideLoading();
+    }
+  },
+
+  async getUserInfo() {
+    let userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      const res = await wx.getUserProfile({
+        desc: '用于参与活动',
+      });
+      userInfo = res.userInfo;
+      await this.setUserInfoToBackend(userInfo);
+      wx.setStorageSync('userInfo', userInfo);
+    }
+    return userInfo;
   },
 
   onClickDatabase(powerList) {
