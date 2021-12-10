@@ -1,7 +1,77 @@
 <!--pages/userHome/index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+<view class="page-body">
+  <view class="page-section top">
+    <view class="userinfo">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
     <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </view>
+  </view>
+  <view class="page-section horizontal-line">
+    <text>游戏规则</text>
+  </view>
+  <view class="page-section">
+    <text>懒得写了。</text>
+  </view>
+  <view class="page-section horizontal-line">
+    <text>抽签结果</text>
+  </view>
+  <view class="page-section">
+    <view class="userinfo">
+      <text>你抽到的是:</text>
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </view>
+  </view>
+  <view class="page-section horizontal-line">
+    <text>参与者</text>
+  </view>
+  <view class="page-section wrap">
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+    <view class="userinfo-other">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    </view>
+  </view>
+  <view class="page-section horizontal-line">
+    <text>房间</text>
+  </view>
+  <view class="page-section">
+    <text>尚无正在进行中的抽签</text>
+  </view>
+  <view class="page-section">
+    <text>房间号：1111</text>
+    <text>状态：未开始</text>
+  </view>
+  <view class="page-section">
+    <view class="button button-green">创建新房间</view>
+    <view class="button button-blue">加入一个房间</view>
+  </view>
+  <view class="page-section">
+    <view class="button button-red">退出</view>
   </view>
 </view>

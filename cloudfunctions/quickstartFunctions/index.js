@@ -4,6 +4,7 @@ const createCollection = require('./createCollection/index');
 const selectRecord = require('./selectRecord/index');
 const updateRecord = require('./updateRecord/index');
 const sumRecord = require('./sumRecord/index');
+const getUser = require('./getUser/index');
 const updateUser = require('./updateUser/index');
 
 
@@ -22,6 +23,8 @@ exports.main = async (event, context) => {
       return await updateRecord.main(event, context);
     case 'sumRecord':
       return await sumRecord.main(event, context);
+    case 'getUser':
+        return await getUser.main(event, context);
     case 'updateUser':
       return await updateUser.main(event, context);
   }

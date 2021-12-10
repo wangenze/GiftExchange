@@ -1,4 +1,6 @@
 // pages/userHome/index.js
+const { getUserInfo } = require('../../utils/login')
+
 Page({
 
   /**
@@ -11,9 +13,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: async function (options) {
     try {
-      let userInfo = JSON.parse(options.userInfoStr);
+      let userInfo = await getUserInfo();
       this.setData({
         userInfo: userInfo,
       })

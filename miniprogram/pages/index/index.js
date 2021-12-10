@@ -1,6 +1,7 @@
 // index.js
 // const app = getApp()
 const { envList } = require('../../envList.js');
+const { getUserInfo } = require('../../utils/login')
 
 Page({
   data: {
@@ -113,7 +114,7 @@ Page({
   },
 
   async jumpPage(e) {
-    const userInfo = await this.getUserInfo();
+    const userInfo = await getUserInfo();
     if (userInfo) {
       wx.navigateTo({
         url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}&userInfoStr=${JSON.stringify(userInfo)}`,
@@ -121,45 +122,6 @@ Page({
     }
   },
   
-  async setUserInfoToBackend(userInfo) {
-    wx.showLoading({
-      title: '',
-    });
-    try {
-      let res = await wx.cloud.callFunction({
-        name: 'quickstartFunctions',
-        config: {
-          env: this.data.selectedEnv.envId
-        },
-        data: {
-          type: 'updateUser',
-          data: {
-            userInfo: userInfo
-          }
-        }
-      })
-      if (!res.result.success) {
-        console.log(res.result)
-        throw new Error("Unable to update user info")
-      }
-    } finally {
-      wx.hideLoading();
-    }
-  },
-
-  async getUserInfo() {
-    let userInfo = wx.getStorageSync('userInfo');
-    if (!userInfo) {
-      const res = await wx.getUserProfile({
-        desc: '用于参与活动',
-      });
-      userInfo = res.userInfo;
-      await this.setUserInfoToBackend(userInfo);
-      wx.setStorageSync('userInfo', userInfo);
-    }
-    return userInfo;
-  },
-
   onClickDatabase(powerList) {
     wx.showLoading({
       title: '',

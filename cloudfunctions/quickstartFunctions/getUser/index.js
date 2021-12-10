@@ -7,17 +7,25 @@ const db = cloud.database();
 const _ = db.command
 
 exports.main = async (event, context) => {
-  let { openid, appid, unionid } = cloud.getWXContext();
+  let { OPENID, APPID, UNIONID } = cloud.getWXContext();
   try {
-    const user = await transaction.collection('gift_user').where({
-      _openid: openid
+    let res = await db.collection('gift_user').where({
+      _openid: OPENID
     }).get()
-    return {
-      success: true,
-      data: {
-        user: user
+    if (res.data.length > 0) {
+      const user = res.data[0];
+      return {
+        success: true,
+        data: {
+          user: user
+        }
+      };
+    } else {
+      return {
+        success: false,
+        errMsg: "User not found"
       }
-    };
+    }
   } catch(e) {
     return {
       success: false,

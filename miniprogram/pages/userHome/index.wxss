@@ -1,1 +1,90 @@
 /* pages/userHome/index.wxss */
+.page-body {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.page-section {
+  padding: 30rpx 25rpx;
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30rpx 25rpx;
+}
+
+.wrap {
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.userinfo {
+  display: flex;
+  flex-flow: row;
+  justify-content: start;
+  align-items: center;
+  column-gap: 25rpx;
+}
+
+.userinfo-other {
+  flex: 1;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.horizontal-line {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 24rpx;
+}
+
+.horizontal-line::before, .horizontal-line::after{
+  content: "";
+  flex: 1 1;
+  border-bottom: 1px solid;
+  border-color: rgba(0, 0, 0, 0.4);
+  margin: auto;
+}
+
+.top {
+  background-color: #FFF;
+  justify-content: start;
+}
+
+.button {
+  width: 300rpx;
+  text-align: center;
+  margin: 0 auto;
+  height: 80rpx;
+  color: white;
+  border-radius: 5px;
+  line-height: 80rpx;
+  background-color: #707070;
+}
+
+.button-green {
+  background-color: #07a160;
+}
+
+.button-red {
+  background-color: #c94c48;
+}
+
+.button-blue {
+  background-color: #0760a1;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: 000;
+}
