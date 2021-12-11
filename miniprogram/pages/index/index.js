@@ -1,7 +1,6 @@
 // index.js
 // const app = getApp()
 const { envList } = require('../../envList.js');
-const { getUserInfo } = require('../../utils/login')
 
 Page({
   data: {
@@ -113,13 +112,10 @@ Page({
     });
   },
 
-  async jumpPage(e) {
-    const userInfo = await getUserInfo();
-    if (userInfo) {
-      wx.navigateTo({
-        url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}&userInfoStr=${JSON.stringify(userInfo)}`,
-      });
-    }
+  jumpPage(e) {
+    wx.navigateTo({
+      url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}`,
+    });
   },
   
   onClickDatabase(powerList) {

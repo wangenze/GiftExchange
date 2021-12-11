@@ -4,8 +4,8 @@ const createCollection = require('./createCollection/index');
 const selectRecord = require('./selectRecord/index');
 const updateRecord = require('./updateRecord/index');
 const sumRecord = require('./sumRecord/index');
-const getUser = require('./getUser/index');
-const updateUser = require('./updateUser/index');
+const activity = require('./activity/index');
+const user = require('./user/index');
 
 
 // 云函数入口函数
@@ -23,9 +23,9 @@ exports.main = async (event, context) => {
       return await updateRecord.main(event, context);
     case 'sumRecord':
       return await sumRecord.main(event, context);
-    case 'getUser':
-        return await getUser.main(event, context);
-    case 'updateUser':
-      return await updateUser.main(event, context);
+    case 'user':
+      return await user.main(event, context);
+    case 'activity':
+      return await activity.main(event, context);
   }
 };

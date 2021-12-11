@@ -47,7 +47,7 @@
   content: "";
   flex: 1 1;
   border-bottom: 1px solid;
-  border-color: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 0, 0, 0.1);
   margin: auto;
 }
 

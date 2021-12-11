@@ -1,77 +1,82 @@
 <!--pages/userHome/index.wxml-->
 <view class="page-body">
   <view class="page-section top">
-    <view class="userinfo">
+    <view wx:if="{{!userInfo}}" class="button button-green" bindtap="login">授权登录</view>
+    <view wx:else class="userinfo">
       <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </view>
   </view>
-  <view class="page-section horizontal-line">
-    <text>游戏规则</text>
-  </view>
-  <view class="page-section">
-    <text>懒得写了。</text>
-  </view>
-  <view class="page-section horizontal-line">
-    <text>抽签结果</text>
-  </view>
-  <view class="page-section">
-    <view class="userinfo">
-      <text>你抽到的是:</text>
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+
+  <block wx:if="{{userInfo}}">
+
+    <view class="page-section horizontal-line">
+      <text>游戏规则</text>
     </view>
-  </view>
-  <view class="page-section horizontal-line">
-    <text>参与者</text>
-  </view>
-  <view class="page-section wrap">
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <view class="page-section">
+      <text>懒得写了。</text>
     </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <block wx:if="{{activityId}}">
+      <view class="page-section horizontal-line">
+        <text>抽签结果</text>
+      </view>
+      <view class="page-section">
+        <view wx:if="{{activityStatus === 'NOT_STARTED'}}">
+          <text>尚未开始，分享以邀请加入</text>
+        </view>
+        <view wx:if="{{activityStatus === 'FINISHED'}}" class="userinfo">
+          <text>你抽到的是:</text>
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+          <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+        </view>
+      </view>
+      <view class="page-section horizontal-line">
+        <text>参与者</text>
+      </view>
+      <view class="page-section wrap">
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+        <view class="userinfo-other">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+      </view>
+    </block>
+    <view class="page-section horizontal-line">
+      <text>房间</text>
     </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
+      <view class="button button-blue">开始抽签</view>
     </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <view wx:if="{{!activityId}}" class="page-section" bindtap="onCreateActivity">
+      <view class="button button-green">创建新房间</view>
     </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <view wx:else class="page-section" bindtap = "onExitActivity">
+      <view class="button button-red">退出房间</view>
     </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    </view>
-    <view class="userinfo-other">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-    </view>
-  </view>
-  <view class="page-section horizontal-line">
-    <text>房间</text>
-  </view>
-  <view class="page-section">
-    <text>尚无正在进行中的抽签</text>
-  </view>
-  <view class="page-section">
-    <text>房间号：1111</text>
-    <text>状态：未开始</text>
-  </view>
-  <view class="page-section">
-    <view class="button button-green">创建新房间</view>
-    <view class="button button-blue">加入一个房间</view>
-  </view>
-  <view class="page-section">
-    <view class="button button-red">退出</view>
-  </view>
+  </block>
 </view>

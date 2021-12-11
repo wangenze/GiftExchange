@@ -1,5 +1,14 @@
 // pages/userHome/index.js
-const { getUserInfo } = require('../../utils/login')
+const {
+  getUserInfo,
+  getUserInfoFromCache,
+  getForeignUserInfos,
+} = require('../../utils/user');
+const {
+  getCurrentActivity,
+  createActivity,
+  exitActivity
+} = require('../../utils/activity');
 
 Page({
 
@@ -7,21 +16,24 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
+    userInfo: null,
+    activityId: null,
+    activityStatus: null,
+    isActivityCreator: null,
+    activityMembers: [],
+    activityUserInfos: [],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    try {
-      let userInfo = await getUserInfo();
-      this.setData({
-        userInfo: userInfo,
-      })
-    } catch(e) {
-      console.error("Unable to find user info");
-      wx.navigateBack();
+    this.updateUserInfo(getUserInfoFromCache());
+    if (this.data.userInfo) {
+      this.updateActivity(await getCurrentActivity());
+      if (options.activityId) {
+        this.joinActivity(options.activityId);
+      }
     }
   },
 
@@ -56,8 +68,8 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
-
+  onPullDownRefresh: async function () {
+    this.updateActivity(await getCurrentActivity());
   },
 
   /**
@@ -72,5 +84,57 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  login: async function () {
+    this.updateUserInfo(await getUserInfo());
+  },
+
+  onCreateActivity: async function() {
+    this.updateActivity(await createActivity());
+  },
+
+  onExitActivity: async function() {
+    this.updateActivity(await exitActivity())
+  },
+  
+  joinActivity: function (activityId) {
+
+  },
+
+  updateUserInfo: function (userInfo) {
+    if (!!userInfo) {
+      this.setData({
+        userInfo: userInfo
+      })
+    }
+  },
+
+  updateActivity: function (activity) {
+    if (activity) {
+      this.setData({
+        activityId: activity._id,
+        activityStatus: activity.status,
+        activityMembers: activity.members.map(member => member.user_openid),
+        isActivityCreator: activity.isCreator
+      })
+    } else {
+      this.setData({
+        activityId: null,
+        activityStatus: null,
+        activityMembers: [],
+        isActivityCreator: null
+      })
+    }
+    this.updateActivityUserInfos();
+  },
+
+  updateActivityUserInfos: function () {
+    if (this.activityMembers) {
+      const userInfos = getForeignUserInfos(this.activityMembers);
+      this.setData({
+        activityUserInfos: userInfos
+      })
+    }
   },
 })
