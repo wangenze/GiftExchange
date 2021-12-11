@@ -9,7 +9,6 @@
   </view>
 
   <block wx:if="{{userInfo}}">
-
     <view class="page-section horizontal-line">
       <text>游戏规则</text>
     </view>
@@ -42,9 +41,12 @@
     <view class="page-section horizontal-line">
       <text>房间</text>
     </view>
+    <view wx:if="{{activityName}}" class="page-section">
+      <text>{{activityName}}</text>
+    </view>
     <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
       <button class="button button-blue" style="width: 300rpx;" open-type="share">邀请好友加入</button>
-      <view class="button button-green" bindtap="onStartActivity">开始抽签</view>
+      <view wx:if="{{isActivityCreator}}" class="button button-green" bindtap="onStartActivity">开始抽签</view>
     </view>
     <view wx:if="{{!activityId}}" class="page-section">
       <view class="button button-green" bindtap="onCreateActivity">创建新房间</view>

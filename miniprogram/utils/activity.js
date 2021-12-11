@@ -7,10 +7,12 @@ module.exports = {
   joinActivity
 }
 
-async function getCurrentActivity() {
-  wx.showLoading({
-    title: '',
-  });
+async function getCurrentActivity(showLoading = true) {
+  if (showLoading) {
+    wx.showLoading({
+      title: '',
+    });
+  }
   try {
     let res = await wx.cloud.callFunction({
       name: 'quickstartFunctions',
@@ -24,7 +26,9 @@ async function getCurrentActivity() {
     })
     return res.result
   } finally {
-    wx.hideLoading();
+    if (showLoading) {
+      wx.hideLoading();
+    }
   }
 }
 
