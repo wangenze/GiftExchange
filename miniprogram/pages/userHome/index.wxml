@@ -22,7 +22,7 @@
       </view>
       <view class="page-section">
         <view wx:if="{{activityStatus === 'NOT_STARTED'}}">
-          <text>尚未开始，分享以邀请加入</text>
+          <text>尚未开始</text>
         </view>
         <view wx:if="{{activityStatus === 'FINISHED'}}" class="userinfo">
           <text>你抽到的是:</text>
@@ -34,35 +34,8 @@
         <text>参与者</text>
       </view>
       <view class="page-section wrap">
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        </view>
-        <view class="userinfo-other">
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <view class="userinfo-other" wx:for="{{activityUserInfos}}" wx:for-item="activityUserInfo" wx:key="index" >
+          <image class="userinfo-avatar" src="{{activityUserInfo.avatarUrl}}" mode="cover"></image>
         </view>
       </view>
     </block>
@@ -70,13 +43,14 @@
       <text>房间</text>
     </view>
     <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
-      <view class="button button-blue">开始抽签</view>
+      <button class="button button-blue" style="width: 300rpx;" open-type="share">邀请好友加入</button>
+      <view class="button button-green" bindtap="onStartActivity">开始抽签</view>
     </view>
-    <view wx:if="{{!activityId}}" class="page-section" bindtap="onCreateActivity">
-      <view class="button button-green">创建新房间</view>
+    <view wx:if="{{!activityId}}" class="page-section">
+      <view class="button button-green" bindtap="onCreateActivity">创建新房间</view>
     </view>
-    <view wx:else class="page-section" bindtap = "onExitActivity">
-      <view class="button button-red">退出房间</view>
+    <view wx:else class="page-section">
+      <view class="button button-red" bindtap = "onExitActivity">退出房间</view>
     </view>
   </block>
 </view>

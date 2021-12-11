@@ -3,7 +3,7 @@
 
   <view class="title">一个小程序</view>
 
-  <view class="top_tip">又丑又没用</view>
+  <view class="top_tip">很丑</view>
 
   <view class="power" wx:key="title" wx:for="{{powerList}}" wx:for-item="power">
     <view class="power_info" data-index="{{index}}" bindtap="onClickPowerInfo">
@@ -25,8 +25,8 @@
     </view>
   </view>
 
-  <view class="environment" bindtap="onChangeShowEnvChoose">当前环境 {{ selectedEnv.alias }}</view>
+  <!-- <view class="environment" bindtap="onChangeShowEnvChoose">当前环境 {{ selectedEnv.alias }}</view> -->
 
-  <cloud-tip-modal showUploadTipProps="{{showUploadTip}}"></cloud-tip-modal>
+  <!-- <cloud-tip-modal showUploadTipProps="{{showUploadTip}}"></cloud-tip-modal> -->
 
 </view>

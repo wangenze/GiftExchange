@@ -1,0 +1,10 @@
+
+<!--miniprogram/components/popupNotice/index.wxml-->
+<view class="tip" wx:if="{{showNotice}}">
+  <view class="tip_back"></view>
+  <view class="tip_detail">
+    <view class="tip_detail_title">体验前需部署云资源</view>
+    <view class="tip_detail_content">请开启调试器进入终端窗口，复制并运行以下命令</view>
+    <view bindtap="onChangeShowHide" class="tip_detail_button">OK</view>
+  </view>
+</view>

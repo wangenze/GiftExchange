@@ -7,7 +7,8 @@ const {
 const {
   getCurrentActivity,
   createActivity,
-  exitActivity
+  exitActivity,
+  joinActivity
 } = require('../../utils/activity');
 
 Page({
@@ -28,11 +29,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    this.updateUserInfo(getUserInfoFromCache());
+    await this.updateUserInfo(getUserInfoFromCache());
     if (this.data.userInfo) {
-      this.updateActivity(await getCurrentActivity());
       if (options.activityId) {
-        this.joinActivity(options.activityId);
+        await this.joinActivity(options.activityId);
       }
     }
   },
@@ -69,7 +69,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: async function () {
-    this.updateActivity(await getCurrentActivity());
+    await this.updateActivity(await getCurrentActivity());
   },
 
   /**
@@ -83,34 +83,74 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    let query = ''
+    if (this.data.activityId) {
+      query += 'activityId=' + this.data.activityId
+    }
+    return {
+      path: '/pages/userHome/index?' + query
+    };
   },
 
   login: async function () {
-    this.updateUserInfo(await getUserInfo());
+    await this.updateUserInfo(await getUserInfo());
   },
 
   onCreateActivity: async function() {
-    this.updateActivity(await createActivity());
+    await this.updateActivity(await createActivity());
   },
 
   onExitActivity: async function() {
-    this.updateActivity(await exitActivity())
-  },
-  
-  joinActivity: function (activityId) {
-
-  },
-
-  updateUserInfo: function (userInfo) {
-    if (!!userInfo) {
-      this.setData({
-        userInfo: userInfo
+    if (this.data.activityId) {
+      const res = await wx.showModal({
+        title: '提示',
+        content: '确定退出当前房间？'
       })
+      if (res.confirm) {
+        await this.updateActivity(await exitActivity());
+      }
     }
   },
 
-  updateActivity: function (activity) {
+  onStartActivity: async function() {
+    const res = await wx.showModal({
+      title: '确定开始抽签',
+      content: '大家都到齐了吗'
+    })
+    if (res.confirm) {
+      wx.showToast({
+        title: '目前还不支持，正在开发中',
+        icon: 'none',
+        duration: 2000,
+      })
+    }
+  },
+  
+  joinActivity: async function (activityId) {
+    if (!!activityId) {
+      if (this.data.activityId && this.data.activityId != activityId) {
+        const res = await wx.showModal({
+          title: '提示',
+          content: '退出当前房间并加入新房间？'
+        })
+        if (res.confirm) {
+          await this.updateActivity(await exitActivity());
+        }
+      }
+      await this.updateActivity(await joinActivity(activityId))
+    }
+  },
+
+  updateUserInfo: async function (userInfo) {
+    if (userInfo) {
+      this.setData({
+        userInfo: userInfo
+      })
+      await this.updateActivity(await getCurrentActivity());
+    }
+  },
+
+  updateActivity: async function (activity) {
     if (activity) {
       this.setData({
         activityId: activity._id,
@@ -126,12 +166,12 @@ Page({
         isActivityCreator: null
       })
     }
-    this.updateActivityUserInfos();
+    await this.updateActivityUserInfos();
   },
 
-  updateActivityUserInfos: function () {
-    if (this.activityMembers) {
-      const userInfos = getForeignUserInfos(this.activityMembers);
+  updateActivityUserInfos: async function () {
+    if (this.data.activityMembers.length > 0) {
+      const userInfos = await getForeignUserInfos(this.data.activityMembers);
       this.setData({
         activityUserInfos: userInfos
       })

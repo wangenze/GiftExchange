@@ -3,7 +3,8 @@ import { envList } from '../envList.js';
 module.exports = {
   getCurrentActivity,
   createActivity,
-  exitActivity
+  exitActivity,
+  joinActivity
 }
 
 async function getCurrentActivity() {
@@ -21,7 +22,6 @@ async function getCurrentActivity() {
         action: 'getCurrentActivity',
       }
     })
-    console.log(res)
     return res.result
   } finally {
     wx.hideLoading();
@@ -42,6 +42,30 @@ async function createActivity() {
         type: 'activity',
         action: 'createActivity',
         data: {}
+      }
+    })
+    return res.result
+  } finally {
+    wx.hideLoading();
+  }
+}
+
+async function joinActivity(activityId) {
+  wx.showLoading({
+    title: '',
+  });
+  try {
+    let res = await wx.cloud.callFunction({
+      name: 'quickstartFunctions',
+      config: {
+        env: envList[0].envId
+      },
+      data: {
+        type: 'activity',
+        action: 'joinActivity',
+        data: {
+          activityId: activityId
+        }
       }
     })
     return res.result
