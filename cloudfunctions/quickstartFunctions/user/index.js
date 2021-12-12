@@ -26,6 +26,9 @@ exports.getCurrentUser = async (event, context) => {
     APPID,
     UNIONID
   } = getWXContext();
+  if (!OPENID) {
+    throw new Error("Unable to find OPENID in context")
+  }
   const res = await db.collection('gift_user').where({
     _openid: OPENID
   }).get()

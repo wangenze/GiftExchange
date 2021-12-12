@@ -1,5 +1,15 @@
-const { init, DYNAMIC_CURRENT_ENV, database, getWXContext } = require('wx-server-sdk');
-const { getCurrentUser } = require('../user');
+const {
+  init,
+  DYNAMIC_CURRENT_ENV,
+  database,
+  getWXContext
+} = require('wx-server-sdk');
+const {
+  getCurrentUser
+} = require('../user');
+const {
+  randomPlan
+} = require('./lottery');
 
 init({
   env: DYNAMIC_CURRENT_ENV
@@ -20,6 +30,8 @@ exports.main = async (event, context) => {
       return await exitActivity(event, context);
     case 'getCurrentActivity':
       return await getCurrentActivity(event, context);
+    case 'startActivity':
+      return await startActivity(event, context);
     default:
       return {
         success: false,
@@ -64,7 +76,8 @@ async function joinActivity(event, context) {
       members: _.addToSet({
         user_openid: user._openid,
         user_public_key: event.data.publicKey
-      })
+      }),
+      updateTime: Date.now(),
     }
   })
   if (activityJoinRes.stats.updated < 1) {
@@ -77,7 +90,7 @@ async function joinActivity(event, context) {
       updateTime: Date.now()
     }
   })
-  return await getCurrentActivity(event, context)
+  return await getCurrentActivity(event, context);
 }
 
 async function exitActivity(event, context) {
@@ -98,11 +111,44 @@ async function exitActivity(event, context) {
       data: {
         members: _.pull({
           user_openid: user._openid
-        })
+        }),
+        updateTime: Date.now(),
       }
     })
   }
   return undefined
+}
+
+async function startActivity(event, context) {
+  user = await getCurrentUser();
+  if (!user.activityId) {
+    return undefined
+  }
+  const activityRes = await db.collection('gift_activity').doc(user.activityId).get()
+  const activity = activityRes.data
+
+  if (activity.status === NOT_STARTED && activity.members.length >= 2) {
+    const plan = randomPlan(activity.members.length);
+    let result = [];
+    for (let i = 0; i < activity.members.length; i++) {
+      result.push({
+        sender: activity.members[i].user_openid,
+        receiver: activity.members[plan[i]].user_openid
+      })
+    }
+    await db.collection('gift_activity').where({
+      _id: activity._id,
+      status: activity.stats,
+      updateTime: activity.updateTime
+    }).update({
+      data: {
+        status: FINISHED,
+        result: result,
+        updateTime: Date.now()
+      }
+    })
+  }
+  return await getCurrentActivity(event, context);
 }
 
 async function getCurrentActivity(event, context) {
@@ -110,8 +156,15 @@ async function getCurrentActivity(event, context) {
   if (!user.activityId) {
     return undefined
   }
-  const activityRes = await db.collection('gift_activity').doc(user.activityId).get()
-  const activity = activityRes.data
+  let activityRes = await db.collection('gift_activity').doc(user.activityId).get()
+  let activity = activityRes.data
+
+  if (activity.result) {
+    activity.result = activity.result.filter(item => item.sender === user._openid)
+  }
+
+  console.log(activity)
+
   return {
     ...activity,
     isCreator: user._openid === activity.creator

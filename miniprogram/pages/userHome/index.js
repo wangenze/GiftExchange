@@ -8,7 +8,8 @@ const {
   getCurrentActivity,
   createActivity,
   exitActivity,
-  joinActivity
+  joinActivity,
+  startActivity
 } = require('../../utils/activity');
 const {
   setEquals
@@ -27,7 +28,10 @@ Page({
     isActivityCreator: null,
     activityMembers: [],
     activityUserInfos: [],
+    activityCreator: null,
     activityCreatorUserInfo: null,
+    activityResult: null,
+    activityResultUserInfo: null,
     activityUpdateTimer: null,
   },
 
@@ -121,14 +125,10 @@ Page({
   onStartActivity: async function () {
     const res = await wx.showModal({
       title: '确定开始抽签',
-      content: '大家都到齐了吗'
+      content: '所有人都到齐了吗？'
     })
     if (res.confirm) {
-      wx.showToast({
-        title: '目前还不支持，正在开发中',
-        icon: 'none',
-        duration: 2000,
-      })
+      await this.updateActivity(await startActivity());
     }
   },
 
@@ -165,7 +165,7 @@ Page({
           if (this.data.activityStatus === 'NOT_STARTED') {
             await this.updateActivity(await getCurrentActivity(false));
           }
-        }, 5000)
+        }, 10000)
       })
       await this.updateActivity(await getCurrentActivity());
     }
@@ -184,6 +184,7 @@ Page({
     await this.updateActivityStatus(activity);
     await this.updateActivityCreator(activity);
     await this.updateActivityUserInfos(activity);
+    await this.updateActivityResultUserInfo(activity);
   },
 
   updateActivityStatus: async function (activity) {
@@ -231,6 +232,22 @@ Page({
         activityCreator: activity.creator,
         isActivityCreator: activity.isCreator,
         activityName: (await getForeignUserInfos([activity.creator]))[0].nickName + " 的房间",
+      })
+    }
+  },
+
+  updateActivityResultUserInfo: async function (activity) {
+    if (!activity || !activity.result || activity.result.length != 1) {
+      this.setData({
+        activityResult: null,
+        activityResultUserInfo: null,
+      })
+    } else if (this.data.activityResult != activity.result[0].receiver) {
+      console.log("Update activity result")
+      const result = activity.result[0].receiver
+      this.setData({
+        activityResult: result,
+        activityResultUserInfo: (await getForeignUserInfos([result]))[0],
       })
     }
   },

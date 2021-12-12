@@ -4,7 +4,8 @@ module.exports = {
   getCurrentActivity,
   createActivity,
   exitActivity,
-  joinActivity
+  joinActivity,
+  startActivity
 }
 
 async function getCurrentActivity(showLoading = true) {
@@ -91,6 +92,28 @@ async function exitActivity() {
       data: {
         type: 'activity',
         action: 'exitActivity',
+        data: {}
+      }
+    })
+    return res.result
+  } finally {
+    wx.hideLoading();
+  }
+}
+
+async function startActivity() {
+  wx.showLoading({
+    title: '',
+  });
+  try {
+    let res = await wx.cloud.callFunction({
+      name: 'quickstartFunctions',
+      config: {
+        env: envList[0].envId
+      },
+      data: {
+        type: 'activity',
+        action: 'startActivity',
         data: {}
       }
     })

@@ -19,15 +19,13 @@
       <view class="page-section horizontal-line">
         <text>抽签结果</text>
       </view>
-      <view class="page-section">
-        <view wx:if="{{activityStatus === 'NOT_STARTED'}}">
-          <text>尚未开始</text>
-        </view>
-        <view wx:if="{{activityStatus === 'FINISHED'}}" class="userinfo">
+      <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
+        <text>尚未开始</text>
+      </view>
+      <view wx:if="{{activityStatus === 'FINISHED' || activityResultUserInfo}}" class="userinfo">
           <text>你抽到的是:</text>
-          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-          <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-        </view>
+          <image class="userinfo-avatar" src="{{activityResultUserInfo.avatarUrl}}" mode="cover"></image>
+          <text class="userinfo-nickname">{{activityResultUserInfo.nickName}}</text>
       </view>
       <view class="page-section horizontal-line">
         <text>参与者</text>
@@ -46,7 +44,7 @@
     </view>
     <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
       <button class="button button-blue" style="width: 300rpx;" open-type="share">邀请好友加入</button>
-      <view wx:if="{{isActivityCreator}}" class="button button-green" bindtap="onStartActivity">开始抽签</view>
+      <view wx:if="{{true || isActivityCreator}}" class="button button-green" bindtap="onStartActivity">开始抽签</view>
     </view>
     <view wx:if="{{!activityId}}" class="page-section">
       <view class="button button-green" bindtap="onCreateActivity">创建新房间</view>
