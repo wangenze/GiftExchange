@@ -44,7 +44,7 @@
     </view>
     <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
       <button class="button button-blue" style="width: 300rpx;" open-type="share">邀请好友加入</button>
-      <view wx:if="{{true || isActivityCreator}}" class="button button-green" bindtap="onStartActivity">开始抽签</view>
+      <view wx:if="{{isActivityCreator}}" class="button button-green" bindtap="onStartActivity">开始抽签</view>
     </view>
     <view wx:if="{{!activityId}}" class="page-section">
       <view class="button button-green" bindtap="onCreateActivity">创建新房间</view>
