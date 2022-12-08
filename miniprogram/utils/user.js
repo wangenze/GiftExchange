@@ -2,6 +2,7 @@ const { envList } = require('../envList.js');
 
 module.exports = {
   getUserInfo,
+  getUserInfoOnLoad,
   getUserInfoFromCache,
   getForeignUserInfos,
 }
@@ -26,6 +27,14 @@ async function getForeignUserInfos(userOpenIds) {
   return res.result
 }
 
+async function getUserInfoOnLoad() {
+  let userInfo = getUserInfoFromCache();
+  if (userInfo) {
+    await setUserInfoToBackend(userInfo);
+  }
+  return userInfo;
+}
+
 async function getUserInfo() {
   let userInfo = getUserInfoFromCache();
   if (!userInfo) {
@@ -33,9 +42,9 @@ async function getUserInfo() {
       desc: '用于参与活动',
     });
     userInfo = res.userInfo;
+    await setUserInfoToBackend(userInfo);
     setUserInfoToCache(userInfo);
   }
-  await setUserInfoToBackend(userInfo);
   return userInfo;
 }
 

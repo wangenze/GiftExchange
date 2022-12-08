@@ -1,6 +1,7 @@
 // pages/userHome/index.js
 const {
   getUserInfo,
+  getUserInfoOnLoad,
   getUserInfoFromCache,
   getForeignUserInfos,
 } = require('../../utils/user');
@@ -39,7 +40,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    await this.updateUserInfo(getUserInfoFromCache());
+    await this.updateUserInfo(getUserInfoOnLoad());
     if (this.data.userInfo) {
       if (options.activityId) {
         await this.joinActivity(options.activityId);
