@@ -125,12 +125,20 @@ Page({
   },
 
   onStartActivity: async function () {
-    const res = await wx.showModal({
-      title: '确定开始抽签',
-      content: '所有人都到齐了吗？'
-    })
-    if (res.confirm) {
-      await this.updateActivity(await startActivity());
+    if (this.data.activityMembers.length <= 2) {
+      await wx.showModal({
+        title: '人数不足',
+        content: '至少3人才能开始',
+        showCancel: false
+      })
+    } else {
+      const res = await wx.showModal({
+        title: '确定开始抽签',
+        content: '所有人都到齐了吗？'
+      })
+      if (res.confirm) {
+        await this.updateActivity(await startActivity());
+      }
     }
   },
 
