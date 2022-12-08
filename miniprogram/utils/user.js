@@ -33,18 +33,18 @@ async function getUserInfo() {
       desc: '用于参与活动',
     });
     userInfo = res.userInfo;
-    await setUserInfoToBackend(userInfo);
     setUserInfoToCache(userInfo);
   }
+  await setUserInfoToBackend(userInfo);
   return userInfo;
 }
 
 function getUserInfoFromCache() {
-  return wx.getStorageSync('userInfo2022');
+  return wx.getStorageSync('userInfo');
 }
 
 function setUserInfoToCache(userInfo) {
-  wx.setStorageSync('userInfo2022', userInfo);
+  wx.setStorageSync('userInfo', userInfo);
 }
 
 async function setUserInfoToBackend(userInfo) {
