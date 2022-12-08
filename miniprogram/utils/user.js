@@ -40,11 +40,11 @@ async function getUserInfo() {
 }
 
 function getUserInfoFromCache() {
-  return wx.getStorageSync('userInfo');
+  return wx.getStorageSync('userInfo2022');
 }
 
 function setUserInfoToCache(userInfo) {
-  wx.setStorageSync('userInfo', userInfo);
+  wx.setStorageSync('userInfo2022', userInfo);
 }
 
 async function setUserInfoToBackend(userInfo) {
