@@ -22,6 +22,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showLoginButton: false,
     userInfo: null,
     activityId: null,
     activityStatus: null,
@@ -40,7 +41,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    await this.updateUserInfo(getUserInfoOnLoad());
+    await this.updateUserInfo(await getUserInfoOnLoad());
     if (this.data.userInfo) {
       if (options.activityId) {
         await this.joinActivity(options.activityId);
@@ -158,10 +159,12 @@ Page({
       }
       this.setData({
         userInfo: null,
+        showLoginButton: true
       })
     } else {
       this.setData({
         userInfo: userInfo,
+        showLoginButton: false,
         activityUpdateTimer: setInterval(async () => {
           if (this.data.activityStatus === 'NOT_STARTED') {
             await this.updateActivity(await getCurrentActivity(false));
