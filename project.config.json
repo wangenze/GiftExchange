@@ -43,6 +43,9 @@
   "projectname": "GiftExchange",
   "libVersion": "2.14.1",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+  "compileType": "miniprogram",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": "2.14.1",
   "condition": {
     "search": {
       "list": []

@@ -6,8 +6,11 @@ init({
 const db = database();
 const _ = db.command
 
+exports.getCurrentUser = getCurrentUser;
 exports.main = async (event, context) => {
   switch (event.action) {
+    case 'getUserInfo':
+      return await getUserInfo(event, context);
     case 'getUserInfos':
       return await getUserInfos(event, context);
     case 'updateUser':
@@ -20,7 +23,7 @@ exports.main = async (event, context) => {
   }
 }
 
-exports.getCurrentUser = async (event, context) => {
+async function getCurrentUser(event, context) {
   let {
     OPENID,
     APPID,
@@ -36,6 +39,11 @@ exports.getCurrentUser = async (event, context) => {
     throw new Error("Invalid user")
   }
   return res.data[0];
+}
+
+async function getUserInfo(event, context) {
+  const user = await getCurrentUser();
+  return user.userInfo;
 }
 
 async function getUserInfos(event, context) {

@@ -28,10 +28,23 @@ async function getForeignUserInfos(userOpenIds) {
 }
 
 async function getUserInfoOnLoad() {
-  let userInfo = getUserInfoFromCache();
-  if (userInfo) {
-    await setUserInfoToBackend(userInfo);
+  let userInfo = undefined;
+  try {
+    const res = await wx.cloud.callFunction({
+      name: 'quickstartFunctions',
+      config: {
+        env: envList[0].envId
+      },
+      data: {
+        type: 'user',
+        action: 'getUserInfo'
+      }
+    });
+    userInfo = res.result;
+  } catch (error) {
+    console.log(error);
   }
+  setUserInfoToCache(userInfo);
   return userInfo;
 }
 
