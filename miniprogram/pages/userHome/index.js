@@ -102,27 +102,26 @@ Page({
   },
 
   saveUserInfo: async function () {
+    let avatarUrl = this.data.avatarUrl;
     if (this.data.avatarLocalUrl) {
       wx.showLoading({
         title: '',
       });
       try {
         const res = await wx.cloud.uploadFile({
-          cloudPath: `${this.data.openId}/avatar.png`,
+          cloudPath: `${this.data.openId}/avatar-${Date.now()}.png`,
           filePath: this.data.avatarLocalUrl,
           config: {
             env: envList[0].envId
           }
         });
-        this.setData({
-          avatarUrl: res.fileID,
-        })
+        avatarUrl = res.fileID;
       } finally {
         wx.hideLoading();
       }
     }
     const userInfo = {
-      avatarUrl: this.data.avatarUrl,
+      avatarUrl: avatarUrl,
       nickName: this.data.nickName,
     };
     await setUserInfoToBackend(userInfo);
