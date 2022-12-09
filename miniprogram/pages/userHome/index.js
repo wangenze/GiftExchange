@@ -15,29 +15,17 @@ Page({
    */
   data: {
     avatarUrl: defaultAvatarUrl,
+    avatarLocalUrl: null,
     nickName: "",
     openId: null,
   },
 
   onChooseAvatar: async function(e) {
     const { avatarUrl } = e.detail;
-    wx.showLoading({
-      title: '',
+    this.setData({
+      avatarUrl: avatarUrl,
+      avatarLocalUrl: avatarUrl,
     });
-    try {
-      const res = await wx.cloud.uploadFile({
-        cloudPath: `${this.data.openId}/avatar.png`,
-        filePath: avatarUrl,
-        config: {
-          env: envList[0].envId
-        }
-      });
-      this.setData({
-        avatarUrl: res.fileID,
-      })
-    } finally {
-      wx.hideLoading();
-    }
   },
 
   /**
@@ -114,6 +102,25 @@ Page({
   },
 
   saveUserInfo: async function () {
+    if (this.data.avatarLocalUrl) {
+      wx.showLoading({
+        title: '',
+      });
+      try {
+        const res = await wx.cloud.uploadFile({
+          cloudPath: `${this.data.openId}/avatar.png`,
+          filePath: this.data.avatarLocalUrl,
+          config: {
+            env: envList[0].envId
+          }
+        });
+        this.setData({
+          avatarUrl: res.fileID,
+        })
+      } finally {
+        wx.hideLoading();
+      }
+    }
     const userInfo = {
       avatarUrl: this.data.avatarUrl,
       nickName: this.data.nickName,
