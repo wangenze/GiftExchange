@@ -1,0 +1,56 @@
+<!--pages/giftExchange/index.wxml-->
+<view class="page-body">
+  <view class="page-section top">
+    <view wx:if="{{showLoginButton}}" class="button button-blue" bindtap="login">创建用户</view>
+    <view wx:else class="userinfo" bindtap="login">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </view>
+  </view>
+
+  <block wx:if="{{userInfo}}">
+    <view class="page-section horizontal-line">
+      <text>游戏规则</text>
+    </view>
+    <view class="page-section">
+      <text>懒得写了。</text>
+    </view>
+    <block wx:if="{{activityId}}">
+      <view class="page-section horizontal-line">
+        <text>抽签结果</text>
+      </view>
+      <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
+        <text>尚未开始</text>
+      </view>
+      <view wx:if="{{activityStatus === 'FINISHED' || activityResultUserInfo}}" class="userinfo">
+          <text>你抽到的是:</text>
+          <image class="userinfo-avatar" src="{{activityResultUserInfo.avatarUrl}}" mode="cover"></image>
+          <text class="userinfo-nickname">{{activityResultUserInfo.nickName}}</text>
+      </view>
+      <view class="page-section horizontal-line">
+        <text>参与者</text>
+      </view>
+      <view class="page-section wrap">
+        <view class="userinfo-other" wx:for="{{activityUserInfos}}" wx:for-item="activityUserInfo" wx:key="index" >
+          <image class="userinfo-avatar" src="{{activityUserInfo.avatarUrl}}" mode="cover"></image>
+        </view>
+      </view>
+    </block>
+    <view class="page-section horizontal-line">
+      <text>房间</text>
+    </view>
+    <view wx:if="{{activityName}}" class="page-section">
+      <text>{{activityName}}</text>
+    </view>
+    <view wx:if="{{activityStatus === 'NOT_STARTED'}}" class="page-section">
+      <button class="button button-blue" style="width: 300rpx;" open-type="share">邀请好友加入</button>
+      <view wx:if="{{isActivityCreator}}" class="button button-green" bindtap="onStartActivity">开始抽签</view>
+    </view>
+    <view wx:if="{{!activityId}}" class="page-section">
+      <view class="button button-green" bindtap="onCreateActivity">创建新房间</view>
+    </view>
+    <view wx:else class="page-section">
+      <view class="button button-red" bindtap = "onExitActivity">退出房间</view>
+    </view>
+  </block>
+</view>

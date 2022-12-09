@@ -12,6 +12,7 @@
     "pages/updateRecordSuccess/index",
     "pages/sumRecord/index",
     "pages/sumRecordResult/index",
+    "pages/giftExchange/index",
     "pages/userHome/index"
   ],
   "window": {
@@ -22,5 +23,8 @@
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "useExtendedLib": {
+    "weui": true
+  }
 }

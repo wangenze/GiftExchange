@@ -1,10 +1,11 @@
 const { envList } = require('../envList.js');
 
 module.exports = {
-  getUserInfo,
-  getUserInfoOnLoad,
-  getUserInfoFromCache,
   getForeignUserInfos,
+  getUserInfoFromBackend,
+  getUserInfoFromCache,
+  setUserInfoToBackend,
+  setUserInfoToCache
 }
 
 async function getForeignUserInfos(userOpenIds) {
@@ -27,8 +28,19 @@ async function getForeignUserInfos(userOpenIds) {
   return res.result
 }
 
-async function getUserInfoOnLoad() {
+function getUserInfoFromCache() {
+  return wx.getStorageSync('userInfo');
+}
+
+function setUserInfoToCache(userInfo) {
+  wx.setStorageSync('userInfo', userInfo);
+}
+
+async function getUserInfoFromBackend() {
   let userInfo = undefined;
+  wx.showLoading({
+    title: '',
+  });
   try {
     const res = await wx.cloud.callFunction({
       name: 'quickstartFunctions',
@@ -43,30 +55,11 @@ async function getUserInfoOnLoad() {
     userInfo = res.result;
   } catch (error) {
     console.log(error);
+  } finally {
+    wx.hideLoading();
   }
   setUserInfoToCache(userInfo);
   return userInfo;
-}
-
-async function getUserInfo() {
-  let userInfo = getUserInfoFromCache();
-  if (!userInfo) {
-    const res = await wx.getUserProfile({
-      desc: '用于参与活动',
-    });
-    userInfo = res.userInfo;
-    await setUserInfoToBackend(userInfo);
-    setUserInfoToCache(userInfo);
-  }
-  return userInfo;
-}
-
-function getUserInfoFromCache() {
-  return wx.getStorageSync('userInfo');
-}
-
-function setUserInfoToCache(userInfo) {
-  wx.setStorageSync('userInfo', userInfo);
 }
 
 async function setUserInfoToBackend(userInfo) {
@@ -91,6 +84,7 @@ async function setUserInfoToBackend(userInfo) {
       console.log(res.result)
       throw new Error("Unable to update user info")
     }
+    setUserInfoToCache(userInfo);
   } finally {
     wx.hideLoading();
   }

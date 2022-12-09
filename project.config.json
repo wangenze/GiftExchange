@@ -41,11 +41,11 @@
   },
   "appid": "wxa4edc3c19568c8f2",
   "projectname": "GiftExchange",
-  "libVersion": "2.14.1",
-  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+  "libVersion": "2.28.0",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "compileType": "miniprogram",
   "simulatorType": "wechat",
-  "simulatorPluginLibVersion": "2.14.1",
+  "simulatorPluginLibVersion": {},
   "condition": {
     "search": {
       "list": []
@@ -68,5 +68,14 @@
         }
       ]
     }
+  },
+  "srcMiniprogramRoot": "miniprogram/",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }

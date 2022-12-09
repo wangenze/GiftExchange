@@ -11,7 +11,7 @@ Page({
         showItem: false,
         item: [{
           title: '抽签',
-          page: 'userHome',
+          page: 'giftExchange',
         }],
       },
     //   {
