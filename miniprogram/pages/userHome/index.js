@@ -5,6 +5,7 @@ const {
   setUserInfoToBackend,
 } = require('../../utils/user');
 const { envList } = require('../../envList.js');
+const { getOpenId } = require('../../utils/utils.js');
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 
 Page({
@@ -14,20 +15,39 @@ Page({
    */
   data: {
     avatarUrl: defaultAvatarUrl,
-    nickName: ""
+    nickName: "",
+    openId: null,
   },
 
-  onChooseAvatar(e) {
-    const { avatarUrl } = e.detail 
-    this.setData({
-      avatarUrl: avatarUrl,
-    })
+  onChooseAvatar: async function(e) {
+    const { avatarUrl } = e.detail;
+    wx.showLoading({
+      title: '',
+    });
+    try {
+      const res = await wx.cloud.uploadFile({
+        cloudPath: `${this.data.openId}/avatar.png`,
+        filePath: avatarUrl,
+        config: {
+          env: envList[0].envId
+        }
+      });
+      this.setData({
+        avatarUrl: res.fileID,
+      })
+    } finally {
+      wx.hideLoading();
+    }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
+    let openId = await getOpenId();
+    this.setData({
+      openId: openId
+    })
     let userInfo = getUserInfoFromCache();
     if (userInfo) {
       this.setData({
