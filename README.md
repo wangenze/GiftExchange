@@ -10,3 +10,16 @@
 
 - [云开发文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
 
+## How to Deploy
+
+### Step 1 - Setup Cloud Env
+1. Create a cloud env
+2. Deploy cloud functions (right click `quickstartFunctions` and select upload and deploy all)
+3. Create 2 collections in cloud env:
+  1. `gift_user`: set permission to read by all and write only by creator
+  2. `gift_activity`: set permission to custom permission and set both read and write to `true`
+
+### Step 2 - Publish MiniProgram
+1. Update the env ID in [miniprogram\envList.js](miniprogram\envList.js)
+2. Compile and upload a new version (beta version will be avaible for test immediately)
+3. Publish on the miniprogram control plane website (need to send for review and wait for publish)
